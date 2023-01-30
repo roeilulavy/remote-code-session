@@ -1,0 +1,60 @@
+.CodeBlock {
+  margin: 0;
+  padding: 25px;
+}
+
+.CodeBlock__header-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #3a404d;
+  border-radius: 10px 10px 0 0;
+  margin: 0;
+  padding: 0 20px;
+}
+
+.CodeBlock__header-title {
+  font-family: 'Roboto',sans-serif;
+  font-size: 1.3rem;
+  line-height: 1.5rem;
+  font-weight: 500;
+}
+
+.CodeBlock__header-subtitle {
+  font-family: 'Roboto',sans-serif;
+  font-size: 1rem;
+  line-height: 1rem;
+  font-weight: 500;
+}
+
+.CodeBlock__header-button {
+  font-family: 'Roboto',sans-serif;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 1rem;
+  line-height: 1rem;
+  font-weight: 500;
+  background-color: transparent;
+  color: white;
+  border: none;
+  cursor: pointer;
+  margin: 0;
+  padding: 0;
+}
+
+.CodeBlock__header-button-span {
+  display: inline-flex;
+  align-items: center;
+  font-size: 1.4rem;
+  margin: 0;
+  padding: 0;
+}
+
+.CodeBlock__code-container {
+  border-radius: 0 0 10px 10px;
+  overflow: hidden;
+  margin: 0;
+  padding: 0;
+}

@@ -1,0 +1,21 @@
+.CodeCard {
+  width: fit-content;
+  border: solid 1px #22262d;
+  border-radius: 10px;
+  margin: 0;
+  padding: 10px 30px;
+  cursor: pointer;
+}
+
+.CodeCard:hover {
+  border: solid 1px #485261;
+}
+
+.CodeCard__title {
+  font-family: 'Roboto',sans-serif;
+  font-size: 1.2rem;
+  line-height: 2rem;
+  font-weight: 400;
+  margin: 0;
+  padding: 0;
+}
