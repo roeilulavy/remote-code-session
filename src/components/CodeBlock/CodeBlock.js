@@ -1,40 +1,17 @@
 import CodeEditor from "@uiw/react-textarea-code-editor";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
+import { getCode } from "../../utils/Api";
+import Loader from "../Loader/Loader";
 import "./CodeBlock.css";
 const { io } = require("socket.io-client");
 
 function CodeBlock() {
   let { id } = useParams();
 
-  const codeString = `  import { Route, Routes, useNavigate } from "react-router-dom";
-  import "./App.css";
-  import CodeBlock from "./CodeBlock/CodeBlock";
-  import Home from "./Home/Home";
-  import Navbar from "./NavBar/Navbar";
-  
-  function App() {
-    const Navigate = useNavigate();
-  
-    return (
-      <div className="App">
-        <Navbar />
-  
-        <Routes>
-          <Route path="/" element={<Home handleCardClick={handleCardClick} />} />
-  
-          <Route path="/codeblock/:id" element={<CodeBlock />} />
-  
-          <Route path="*" element={<Navigate to="/" />} />
-        </Routes>
-      </div>
-    );
-  }
-  
-  export default App;`;
-
+  const [isLoading, setIsLoading] = useState(true);
   const [socket, setSocket] = useState(null);
-  const [code, setCode] = useState(codeString);
+  const [code, setCode] = useState("");
   const [copy, setCopy] = useState(false);
   const [isMentor, setIsMentor] = useState(true);
 
@@ -44,17 +21,26 @@ function CodeBlock() {
     const socket = io("http://localhost:5000");
     setSocket(socket);
 
+    const getCodeBlock = async () => {
+      const codeBlock = await getCode(id);
+
+      if (codeBlock) {
+        const formattedCode = codeBlock
+          .split("/n")
+          .map((line) => {
+            return line.trim();
+          })
+          .join("\n");
+
+        setCode(formattedCode);
+        setIsLoading(false);
+      }
+    };
+    getCodeBlock();
+
     socket.on("connect", () => {
       console.log("Connected to server");
     });
-
-    // socket.on("mentor", () => {
-    //   console.log("User is a mentor");
-    // });
-
-    // socket.on("student", () => {
-    //   console.log("User is a student");
-    // });
 
     const newUserConnected = () => {
       socket.emit("new user", sid, (response) => {
@@ -90,55 +76,63 @@ function CodeBlock() {
 
   return (
     <div className="CodeBlock">
-      <div className="CodeBlock__header-container">
-        <h1 className="CodeBlock__header-title">Title {id}</h1>
-        <h2 className="CodeBlock__header-subtitle">
-          {isMentor ? "View mode" : "Edit mode"}
-        </h2>
-        {copy ? (
-          <button className="CodeBlock__header-button">
-            <span className="CodeBlock__header-button-span">
-              <ion-icon name="checkmark-sharp"></ion-icon>
-            </span>
-            Copied!
-          </button>
-        ) : (
-          <button
-            className="CodeBlock__header-button"
-            onClick={() => {
-              navigator.clipboard.writeText(codeString);
-              setCopy(true);
-              setTimeout(() => {
-                setCopy(false);
-              }, 3000);
-            }}
-          >
-            <span className="CodeBlock__header-button-span">
-              <ion-icon name="clipboard-outline"></ion-icon>
-            </span>
-            Copy code
-          </button>
-        )}
-      </div>
+      {isLoading ? (
+        <Loader />
+      ) : (
+        <>
+          <div className="CodeBlock__header-container">
+            <h1 className="CodeBlock__header-title">Title</h1>
+            <h2 className="CodeBlock__header-subtitle">
+              {isMentor ? "View mode" : "Edit mode"}
+            </h2>
+            {copy ? (
+              <button className="CodeBlock__header-button">
+                <span className="CodeBlock__header-button-span">
+                  <ion-icon name="checkmark-sharp"></ion-icon>
+                </span>
+                Copied!
+              </button>
+            ) : (
+              <button
+                className="CodeBlock__header-button"
+                onClick={() => {
+                  navigator.clipboard.writeText("");
+                  setCopy(true);
+                  setTimeout(() => {
+                    setCopy(false);
+                  }, 3000);
+                }}
+              >
+                <span className="CodeBlock__header-button-span">
+                  <ion-icon name="clipboard-outline"></ion-icon>
+                </span>
+                Copy code
+              </button>
+            )}
+          </div>
 
-      <div className="CodeBlock__code-container">
-        <CodeEditor
-          value={code}
-          language="jsx"
-          placeholder="Please enter JS code."
-          onChange={(e) => socket.emit("code-update", { code: e.target.value })}
-          readOnly={isMentor ? true : false}
-          padding={15}
-          style={{
-            maxHeight: "80vh",
-            fontSize: 16,
-            backgroundColor: "#1e1e1e",
-            overflow: "auto",
-            fontFamily:
-              "ui-monospace,SFMono-Regular,SF Mono,Consolas,Liberation Mono,Menlo,monospace",
-          }}
-        />
-      </div>
+          <div className="CodeBlock__code-container">
+            <CodeEditor
+              value={code}
+              language="javascript"
+              placeholder="Please enter JS code."
+              onChange={(e) =>
+                socket.emit("code-update", { code: e.target.value })
+              }
+              readOnly={isMentor ? true : false}
+              padding={15}
+              style={{
+                maxHeight: "80vh",
+                fontSize: 16,
+                backgroundColor: "#1e1e1e",
+                overflow: "auto",
+                fontFamily:
+                  "ui-monospace,SFMono-Regular,SF Mono,Consolas,Liberation Mono,Menlo,monospace",
+              }}
+            />
+          </div>
+        </>
+      )}
     </div>
   );
 }
