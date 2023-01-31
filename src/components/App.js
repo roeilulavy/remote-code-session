@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { Route, Routes, useNavigate } from "react-router-dom";
 import "./App.css";
 import CodeBlock from "./CodeBlock/CodeBlock";
@@ -10,6 +11,12 @@ function App() {
   const handleCardClick = (id) => {
     Navigate(`/codeblock/${id}`);
   };
+
+  useEffect(() => {
+    if (!localStorage.getItem("sid")) {
+      localStorage.setItem("sid", Math.floor(Math.random() * 1000000));
+    }
+  }, []);
 
   return (
     <div className="App">

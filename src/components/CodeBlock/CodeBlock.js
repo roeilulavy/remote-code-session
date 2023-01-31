@@ -1,7 +1,8 @@
 import CodeEditor from "@uiw/react-textarea-code-editor";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import "./CodeBlock.css";
+const { io } = require("socket.io-client");
 
 function CodeBlock() {
   let { id } = useParams();
@@ -32,17 +33,68 @@ function CodeBlock() {
   
   export default App;`;
 
+  const [socket, setSocket] = useState(null);
   const [code, setCode] = useState(codeString);
   const [copy, setCopy] = useState(false);
+  const [isMentor, setIsMentor] = useState(true);
+
+  useEffect(() => {
+    let sid = null;
+
+    const socket = io("http://localhost:5000");
+    setSocket(socket);
+
+    socket.on("connect", () => {
+      console.log("Connected to server");
+    });
+
+    // socket.on("mentor", () => {
+    //   console.log("User is a mentor");
+    // });
+
+    // socket.on("student", () => {
+    //   console.log("User is a student");
+    // });
+
+    const newUserConnected = () => {
+      socket.emit("new user", sid, (response) => {
+        let obj = response.activeUsers.find((item) => {
+          if (item.sessionId === sid) {
+            return true;
+          }
+          return null;
+        });
+
+        if (obj.role !== "mentor") {
+          setIsMentor(false);
+        }
+      });
+    };
+
+    const checkForSid = () => {
+      if (!localStorage.getItem("sid")) {
+        localStorage.setItem("sid", Math.floor(Math.random() * 1000000));
+      }
+
+      sid = localStorage.getItem("sid");
+      newUserConnected();
+    };
+
+    checkForSid();
+
+    socket.on("code-update", (code) => setCode(code));
+    return () => {
+      socket.disconnect();
+    };
+  }, []);
 
   return (
     <div className="CodeBlock">
-      <div>
-        <h2>dfdfdf</h2>
-      </div>
       <div className="CodeBlock__header-container">
         <h1 className="CodeBlock__header-title">Title {id}</h1>
-        <h2 className="CodeBlock__header-subtitle">Socket status</h2>
+        <h2 className="CodeBlock__header-subtitle">
+          {isMentor ? "View mode" : "Edit mode"}
+        </h2>
         {copy ? (
           <button className="CodeBlock__header-button">
             <span className="CodeBlock__header-button-span">
@@ -74,9 +126,9 @@ function CodeBlock() {
           value={code}
           language="jsx"
           placeholder="Please enter JS code."
-          onChange={(evn) => setCode(evn.target.value)}
+          onChange={(e) => socket.emit("code-update", { code: e.target.value })}
+          readOnly={isMentor ? true : false}
           padding={15}
-          readOnly={false}
           style={{
             maxHeight: "80vh",
             fontSize: 16,
