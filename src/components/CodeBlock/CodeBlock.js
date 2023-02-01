@@ -22,7 +22,7 @@ function CodeBlock() {
   useEffect(() => {
     let sid = null;
 
-    const socket = io("http://35.174.209.173:8080");
+    const socket = io("https://ec2-35-174-209-173.compute-1.amazonaws.com");
     setSocket(socket);
 
     const getCodeBlock = async () => {
