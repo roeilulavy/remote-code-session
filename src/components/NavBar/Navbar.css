@@ -8,32 +8,12 @@
   padding: 10px 30px;
 }
 
-.Navbar__title {
-  font-family:'Roboto',sans-serif;
-  font-size: 1rem;
-  line-height: 2rem;
-  font-weight: 500;
-  color: rgba(245, 245, 245, 0.8);
-  margin: 0;
-  padding: 0;
-}
-
-.Navbar__nav-container {
-  max-width: 100%;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  gap: 15px;
-  margin: 0;
-  padding: 0;
-}
-
 .Navbar__link {
   display: flex;
   align-items: center;
   justify-content: center;
   font-family: 'Roboto',sans-serif;
-  font-size: 1rem;
+  font-size: 1.5rem;
   line-height: 2rem;
   color: rgba(245, 245, 245, 0.8);
   text-decoration: none;
@@ -48,15 +28,9 @@
   .Navbar {
     padding: 10px;
   }
-}
 
-@media screen and (max-width:550px) {
-  .Navbar__title {
-    line-height: 1.1rem;
-  }
-  
   .Navbar__link {
-    font-size: 0.8rem;
-    line-height: 1rem;
+    font-size: 1.1rem;
+    line-height: 1.5rem;
   }
 }

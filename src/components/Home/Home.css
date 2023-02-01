@@ -17,3 +17,16 @@
   gap: 10px;
 }
 
+@media screen and (max-width:700px) {
+  .Home__cards-container {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .Home__title {
+    font-size: 1.8rem;
+    line-height: 2.5rem;
+  }
+
+}
+
