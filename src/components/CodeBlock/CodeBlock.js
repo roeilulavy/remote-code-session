@@ -1,6 +1,8 @@
 import CodeEditor from "@uiw/react-textarea-code-editor";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
+import Offline from "../../images/offline.png";
+import Online from "../../images/online.png";
 import { getCode } from "../../utils/Api";
 import Loader from "../Loader/Loader";
 import "./CodeBlock.css";
@@ -11,6 +13,7 @@ function CodeBlock() {
 
   const [isLoading, setIsLoading] = useState(true);
   const [socket, setSocket] = useState(null);
+  const [socketOnline, setSocketOnline] = useState(false);
   const [title, setTitle] = useState("");
   const [code, setCode] = useState("");
   const [copy, setCopy] = useState(false);
@@ -42,6 +45,12 @@ function CodeBlock() {
 
     socket.on("connect", () => {
       console.log("Connected to server");
+      setSocketOnline(true);
+    });
+
+    socket.on("disconnect", () => {
+      console.log("Disconnected from server");
+      setSocketOnline(false);
     });
 
     const newUserConnected = () => {
@@ -87,6 +96,19 @@ function CodeBlock() {
           <div className="CodeBlock__header-container">
             <h1 className="CodeBlock__header-title">{title}</h1>
             <h2 className="CodeBlock__header-subtitle">
+              {socketOnline ? (
+                <img
+                  className="CodeBlock__header-status"
+                  src={Online}
+                  alt="Socket online"
+                />
+              ) : (
+                <img
+                  className="CodeBlock__header-status"
+                  src={Offline}
+                  alt="Socket offline"
+                />
+              )}
               {isMentor ? "View mode" : "Edit mode"}
             </h2>
             {copy ? (

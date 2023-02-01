@@ -28,6 +28,13 @@
   font-weight: 500;
 }
 
+.CodeBlock__header-status {
+  width: 10px;
+  height: 10px;
+  margin: 0 5px;
+  padding: 0;
+}
+
 .CodeBlock__header-button {
   font-family: 'Roboto',sans-serif;
   display: inline-flex;
