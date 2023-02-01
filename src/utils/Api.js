@@ -44,7 +44,7 @@ export const getCode = async (codeId) => {
       return null;
     });
 
-    response = matchCode.code;
+    response = matchCode;
   });
 
   return response;

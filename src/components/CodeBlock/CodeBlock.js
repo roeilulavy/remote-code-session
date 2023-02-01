@@ -11,6 +11,7 @@ function CodeBlock() {
 
   const [isLoading, setIsLoading] = useState(true);
   const [socket, setSocket] = useState(null);
+  const [title, setTitle] = useState("");
   const [code, setCode] = useState("");
   const [copy, setCopy] = useState(false);
   const [isMentor, setIsMentor] = useState(true);
@@ -25,14 +26,15 @@ function CodeBlock() {
       const codeBlock = await getCode(id);
 
       if (codeBlock) {
-        const formattedCode = codeBlock
+        const formattedCode = codeBlock.code
           .split("/n")
           .map((line) => {
-            return line.trim();
+            return line;
           })
           .join("\n");
 
         setCode(formattedCode);
+        setTitle(codeBlock.title);
         setIsLoading(false);
       }
     };
@@ -81,7 +83,7 @@ function CodeBlock() {
       ) : (
         <>
           <div className="CodeBlock__header-container">
-            <h1 className="CodeBlock__header-title">Title</h1>
+            <h1 className="CodeBlock__header-title">{title}</h1>
             <h2 className="CodeBlock__header-subtitle">
               {isMentor ? "View mode" : "Edit mode"}
             </h2>
