@@ -22,9 +22,7 @@ function CodeBlock() {
   useEffect(() => {
     let sid = null;
 
-    const socket = io(
-      "http://realtimecode-env-2.eba-2nir3px2.us-east-1.elasticbeanstalk.com/"
-    );
+    const socket = io("http://35.174.209.173:8080/");
     setSocket(socket);
 
     const getCodeBlock = async () => {
