@@ -23,7 +23,7 @@ function CodeBlock() {
     let sid = null;
 
     const socket = io(
-      "https://realtimecode-env-2.eba-2nir3px2.us-east-1.elasticbeanstalk.com/"
+      "http://realtimecode-env-2.eba-2nir3px2.us-east-1.elasticbeanstalk.com/"
     );
     setSocket(socket);
 
