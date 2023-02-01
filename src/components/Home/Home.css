@@ -11,6 +11,13 @@
   border-bottom: solid 1px #22262d;
 }
 
+.Home__subtitle {
+  font-family: 'Roboto',sans-serif;
+  font-size: 1.9rem;
+  line-height: 3rem;
+  font-weight: 500;
+}
+
 .Home__cards-container {
   display: flex;
   flex-direction: row;
@@ -26,6 +33,10 @@
   .Home__title {
     font-size: 1.8rem;
     line-height: 2.5rem;
+  }
+
+  .Home__subtitle {
+    font-size: 1.6rem;
   }
 
 }

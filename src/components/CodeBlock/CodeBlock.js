@@ -35,8 +35,8 @@ function CodeBlock() {
 
         setCode(formattedCode);
         setTitle(codeBlock.title);
-        setIsLoading(false);
       }
+      setIsLoading(false);
     };
     getCodeBlock();
 
@@ -74,12 +74,14 @@ function CodeBlock() {
     return () => {
       socket.disconnect();
     };
-  }, []);
+  }, [id]);
 
   return (
     <div className="CodeBlock">
       {isLoading ? (
         <Loader />
+      ) : !code ? (
+        <h1 className="CodeBlock__header-title">Not found!</h1>
       ) : (
         <>
           <div className="CodeBlock__header-container">

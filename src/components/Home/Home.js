@@ -43,7 +43,7 @@ function Home({ handleCardClick }) {
               ))}
             </div>
           ) : (
-            <h2>Not found!</h2>
+            <h2 className="Home__subtitle">Not found!</h2>
           )}
         </section>
       )}
