@@ -3,7 +3,7 @@
   padding: 25px;
 }
 
-.CodeBlock__header-container {
+.CodeBlock__header-container, .CodeBlock__question-container {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
@@ -14,7 +14,11 @@
   padding: 0 20px;
 }
 
-.CodeBlock__header-title {
+.CodeBlock__question-container {
+  margin: 20px 0 0;
+}
+
+.CodeBlock__header-title, .CodeBlock__question-title {
   font-family: 'Roboto',sans-serif;
   font-size: 1.3rem;
   line-height: 1.5rem;
@@ -35,7 +39,7 @@
   padding: 0;
 }
 
-.CodeBlock__header-button {
+.CodeBlock__header-button, .CodeBlock__question-button {
   font-family: 'Roboto',sans-serif;
   display: inline-flex;
   align-items: center;
@@ -51,7 +55,7 @@
   padding: 0;
 }
 
-.CodeBlock__header-button-span {
+.CodeBlock__header-button-span, .CodeBlock__question-button-span {
   display: inline-flex;
   align-items: center;
   font-size: 1.4rem;
@@ -59,19 +63,43 @@
   padding: 0;
 }
 
-.CodeBlock__code-container {
+.CodeBlock__code-container, .CodeBlock__task-container {
+  max-height: 60vh;
   border-radius: 0 0 10px 10px;
   overflow: hidden;
   margin: 0;
   padding: 0;
 }
 
+.CodeBlock__task-container {
+  max-height: 30vh;
+  background-color: #1e1e1e;
+  margin: 0;
+  padding: 10px;
+}
+
+.CodeBlock__task-text {
+  position: relative;
+  width: 100%;
+  min-height: 100px;
+  resize: none;
+  font-family: 'Roboto',sans-serif;
+  font-size: 1.1rem;
+  line-height: 1.5rem;
+  font-weight: 400;
+  color: rgb(207, 207, 207);
+  background-color: transparent;
+  border: none;
+  margin: 0;
+  padding: 0;
+}
+
 @media screen and (max-width:700px) {
-  .CodeBlock__header-title {
+  .CodeBlock__header-title, .CodeBlock__question-title {
     font-size: 1rem;
   }
   
-  .CodeBlock__header-button-span {
+  .CodeBlock__header-button-span, .CodeBlock__question-button-span {
     font-size: 1.2rem;
   }
 }

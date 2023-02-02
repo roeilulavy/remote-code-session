@@ -17,7 +17,7 @@ export const db = getFirestore(app);
 export const fetchCodes = async () => {
   let response = null;
 
-  await getDocs(collection(db, "Codes")).then((querySnapshot) => {
+  await getDocs(collection(db, "TextCodes")).then((querySnapshot) => {
     const codeList = querySnapshot.docs.map((doc) => ({
       ...doc.data(),
       id: doc.id,
@@ -31,7 +31,7 @@ export const fetchCodes = async () => {
 export const getCode = async (codeId) => {
   let response = null;
 
-  await getDocs(collection(db, "Codes")).then((querySnapshot) => {
+  await getDocs(collection(db, "TextCodes")).then((querySnapshot) => {
     const codeBlock = querySnapshot.docs.map((doc) => ({
       ...doc.data(),
       id: doc.id,

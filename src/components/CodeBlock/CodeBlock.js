@@ -13,31 +13,46 @@ function CodeBlock() {
 
   const [isLoading, setIsLoading] = useState(true);
   const [socket, setSocket] = useState(null);
-  const [socketOnline, setSocketOnline] = useState(false);
+  const [isSocketOnline, setIsSocketOnline] = useState(false);
+  const [isMentor, setIsMentor] = useState(true);
   const [title, setTitle] = useState("");
   const [code, setCode] = useState("");
   const [copy, setCopy] = useState(false);
-  const [isMentor, setIsMentor] = useState(true);
+  const [task, setTask] = useState("");
+  const [solution, setSolution] = useState("");
+  const [checkButtonState, setCheckButtonState] = useState("Check your code");
 
   useEffect(() => {
     let sid = null;
 
-    const socket = io("https://real-time-coding.onrender.com");
+    // const socket = io("https://real-time-coding.onrender.com");
+    const socket = io("localhost:5000");
     setSocket(socket);
 
     const getCodeBlock = async () => {
       const codeBlock = await getCode(id);
 
       if (codeBlock) {
+        setTitle(codeBlock.title);
+
         const formattedCode = codeBlock.code
-          .split("/n")
+          .split("	") // split on TAB
           .map((line) => {
             return line;
           })
           .join("\n");
 
         setCode(formattedCode);
-        setTitle(codeBlock.title);
+
+        const formattedTask = codeBlock.task
+          .split("/n") // split on TAB
+          .map((line) => {
+            return line;
+          })
+          .join("\n");
+
+        setTask(formattedTask);
+        setSolution(codeBlock.solution);
       }
       setIsLoading(false);
     };
@@ -45,12 +60,12 @@ function CodeBlock() {
 
     socket.on("connect", () => {
       console.log("Connected to server");
-      setSocketOnline(true);
+      setIsSocketOnline(true);
     });
 
     socket.on("disconnect", () => {
       console.log("Disconnected from server");
-      setSocketOnline(false);
+      setIsSocketOnline(false);
     });
 
     const newUserConnected = () => {
@@ -85,6 +100,52 @@ function CodeBlock() {
     };
   }, [id]);
 
+  const checkLiveSolution = (e) => {
+    let codeToCheck = e
+      .split(" ")
+      .join("")
+      .split("\n")
+      .join("")
+      .split("	")
+      .join("");
+    let solutionToCheck = solution
+      .split(" ")
+      .join("")
+      .split("\n")
+      .join("")
+      .split("	")
+      .join("");
+
+    if (codeToCheck === solutionToCheck) {
+      setCheckButtonState("Success!");
+    }
+  };
+
+  const checkSolution = () => {
+    setCheckButtonState("Checking code");
+
+    let codeToCheck = code
+      .split(" ")
+      .join("")
+      .split("\n")
+      .join("")
+      .split("	")
+      .join("");
+    let solutionToCheck = solution
+      .split(" ")
+      .join("")
+      .split("\n")
+      .join("")
+      .split("	")
+      .join("");
+
+    if (codeToCheck === solutionToCheck) {
+      setCheckButtonState("Success!");
+    } else {
+      setCheckButtonState("Try agin");
+    }
+  };
+
   return (
     <div className="CodeBlock">
       {isLoading ? (
@@ -96,7 +157,7 @@ function CodeBlock() {
           <div className="CodeBlock__header-container">
             <h1 className="CodeBlock__header-title">{title}</h1>
             <h2 className="CodeBlock__header-subtitle">
-              {socketOnline ? (
+              {isSocketOnline ? (
                 <img
                   className="CodeBlock__header-status"
                   src={Online}
@@ -142,19 +203,53 @@ function CodeBlock() {
               value={code}
               language="javascript"
               placeholder="Please enter JS code."
-              onChange={(e) =>
-                socket.emit("code-update", { code: e.target.value })
-              }
-              readOnly={isMentor ? true : false}
+              onChange={(e) => {
+                socket.emit("code-update", { code: e.target.value });
+                setCode(e.target.value);
+                checkLiveSolution(e.target.value);
+              }}
+              // readOnly={isMentor ? true : false}
               padding={15}
               style={{
-                maxHeight: "80vh",
+                maxHeight: "60vh",
                 fontSize: 16,
                 backgroundColor: "#1e1e1e",
                 overflow: "auto",
                 fontFamily:
                   "ui-monospace,SFMono-Regular,SF Mono,Consolas,Liberation Mono,Menlo,monospace",
               }}
+            />
+          </div>
+
+          <div className="CodeBlock__question-container">
+            <h1 className="CodeBlock__question-title">Task</h1>
+
+            <button
+              className="CodeBlock__question-button"
+              onClick={checkSolution}
+            >
+              <span className="CodeBlock__question-button-span">
+                {checkButtonState === "Check your code" ? (
+                  <ion-icon name="code-outline"></ion-icon>
+                ) : checkButtonState === "Checking code" ? (
+                  <ion-icon name="ellipsis-horizontal-outline"></ion-icon>
+                ) : checkButtonState === "Try agin" ? (
+                  <ion-icon name="alert-circle-outline"></ion-icon>
+                ) : (
+                  checkButtonState === "Success!" && (
+                    <ion-icon name="checkmark-done-outline"></ion-icon>
+                  )
+                )}
+              </span>
+              {checkButtonState}
+            </button>
+          </div>
+
+          <div className="CodeBlock__task-container">
+            <textarea
+              className="CodeBlock__task-text"
+              disabled={true}
+              value={task}
             />
           </div>
         </>
