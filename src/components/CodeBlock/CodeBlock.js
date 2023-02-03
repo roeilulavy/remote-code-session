@@ -1,8 +1,10 @@
 import CodeEditor from "@uiw/react-textarea-code-editor";
+import Lottie from "lottie-react";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import Offline from "../../images/offline.png";
 import Online from "../../images/online.png";
+import * as Anim from "../../images/success-anim.json";
 import { getCode } from "../../utils/Api";
 import Loader from "../Loader/Loader";
 import "./CodeBlock.css";
@@ -21,6 +23,7 @@ function CodeBlock() {
   const [task, setTask] = useState("");
   const [solution, setSolution] = useState("");
   const [checkButtonState, setCheckButtonState] = useState("Check your code");
+  const [isPopupOpen, setIsPopupOpen] = useState(false);
 
   useEffect(() => {
     let sid = null;
@@ -118,6 +121,7 @@ function CodeBlock() {
 
     if (codeToCheck === solutionToCheck) {
       setCheckButtonState("Success!");
+      setIsPopupOpen(true);
     }
   };
 
@@ -141,6 +145,7 @@ function CodeBlock() {
 
     if (codeToCheck === solutionToCheck) {
       setCheckButtonState("Success!");
+      setIsPopupOpen(true);
     } else {
       setCheckButtonState("Try agin");
     }
@@ -154,6 +159,24 @@ function CodeBlock() {
         <h1 className="CodeBlock__header-title">Not found!</h1>
       ) : (
         <>
+          {isPopupOpen && (
+            <div className="CodeBlock__popup-container">
+              <div className="CodeBlock__popup">
+                <h1 className="CodeBlock__popup-title">Success!</h1>
+                <Lottie
+                  className="CodeBlock__popup-lottie"
+                  animationData={Anim}
+                />
+                <button
+                  className="CodeBlock__popup-button"
+                  onClick={() => setIsPopupOpen(false)}
+                >
+                  Close
+                </button>
+              </div>
+            </div>
+          )}
+
           <div className="CodeBlock__header-container">
             <h1 className="CodeBlock__header-title">{title}</h1>
             <h2 className="CodeBlock__header-subtitle">

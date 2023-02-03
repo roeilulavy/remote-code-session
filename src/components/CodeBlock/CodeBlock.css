@@ -3,6 +3,59 @@
   padding: 25px;
 }
 
+.CodeBlock__popup-container {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: rgba(0, 0, 0, 0.6);
+  z-index: 1;
+}
+
+.CodeBlock__popup {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color: #0e1117;
+  border-radius: 20px;
+  margin: 0 0 30vh;
+  padding: 30px;
+}
+
+.CodeBlock__popup-title {
+  font-family: 'Roboto',sans-serif;
+  font-size: 2rem;
+  line-height: 2rem;
+  font-weight: 500;
+  margin: 0 0 10px;
+  padding: 0;
+}
+
+.CodeBlock__popup-lottie {
+  width: 320px;
+  height: 320px;
+}
+
+.CodeBlock__popup-button {
+  position: relative;
+  width: 100%;
+  font-family: 'Roboto',sans-serif;
+  font-size: 1.5rem;
+  line-height: 2.5rem;
+  font-weight: 500;
+  color: whitesmoke;
+  background-color: #3a404d;
+  border-radius: 20px;
+  margin: 20px 0 0;
+  padding: 5px;
+  cursor: pointer;
+}
+
 .CodeBlock__header-container, .CodeBlock__question-container {
   display: flex;
   flex-direction: row;
@@ -102,4 +155,26 @@
   .CodeBlock__header-button-span, .CodeBlock__question-button-span {
     font-size: 1.2rem;
   }
+
+  .CodeBlock__popup {
+    margin: 0 0 15vh;
+  }
+  
+  .CodeBlock__popup-title {
+    font-size: 2rem;
+    line-height: 2rem;
+    margin: 0 0 10px;
+    padding: 0;
+  }
+  
+  .CodeBlock__popup-lottie {
+    width: 250px;
+    height: 250px;
+  }
+  
+  .CodeBlock__popup-button {
+    font-size: 1.3rem;
+    line-height: 2rem;
+  }
+
 }
