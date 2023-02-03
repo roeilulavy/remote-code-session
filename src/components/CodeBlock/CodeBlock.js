@@ -20,10 +20,12 @@ function CodeBlock() {
   const [title, setTitle] = useState("");
   const [code, setCode] = useState("");
   const [copy, setCopy] = useState(false);
-  const [task, setTask] = useState("");
+  const [showSolution, setShowSolution] = useState(false);
   const [solution, setSolution] = useState("");
+  const [task, setTask] = useState("");
   const [checkButtonState, setCheckButtonState] = useState("Check your code");
   const [isPopupOpen, setIsPopupOpen] = useState(false);
+  const [disableLiveChecking, setDisableLiveChecking] = useState(false);
 
   useEffect(() => {
     let sid = null;
@@ -55,7 +57,15 @@ function CodeBlock() {
           .join("\n");
 
         setTask(formattedTask);
-        setSolution(codeBlock.solution);
+
+        const formattedSolution = codeBlock.solution
+          .split("	") // split on TAB
+          .map((line) => {
+            return line;
+          })
+          .join("\n");
+
+        setSolution(formattedSolution);
       }
       setIsLoading(false);
     };
@@ -104,6 +114,10 @@ function CodeBlock() {
   }, [id]);
 
   const checkLiveSolution = (e) => {
+    if (disableLiveChecking) {
+      return;
+    }
+
     let codeToCheck = e
       .split(" ")
       .join("")
@@ -122,6 +136,7 @@ function CodeBlock() {
     if (codeToCheck === solutionToCheck) {
       setCheckButtonState("Success!");
       setIsPopupOpen(true);
+      setDisableLiveChecking(true);
     }
   };
 
@@ -179,6 +194,7 @@ function CodeBlock() {
 
           <div className="CodeBlock__header-container">
             <h1 className="CodeBlock__header-title">{title}</h1>
+
             <h2 className="CodeBlock__header-subtitle">
               {isSocketOnline ? (
                 <img
@@ -195,30 +211,59 @@ function CodeBlock() {
               )}
               {isMentor ? "View mode" : "Edit mode"}
             </h2>
-            {copy ? (
-              <button className="CodeBlock__header-button">
-                <span className="CodeBlock__header-button-span">
-                  <ion-icon name="checkmark-sharp"></ion-icon>
-                </span>
-                Copied!
-              </button>
-            ) : (
-              <button
-                className="CodeBlock__header-button"
-                onClick={() => {
-                  navigator.clipboard.writeText("");
-                  setCopy(true);
-                  setTimeout(() => {
-                    setCopy(false);
-                  }, 3000);
-                }}
-              >
-                <span className="CodeBlock__header-button-span">
-                  <ion-icon name="clipboard-outline"></ion-icon>
-                </span>
-                Copy code
-              </button>
-            )}
+
+            <div className="CodeBlock__header-button-container">
+              {isMentor && (
+                <>
+                  {showSolution ? (
+                    <button
+                      className="CodeBlock__header-button"
+                      onClick={() => setShowSolution(false)}
+                    >
+                      <span className="CodeBlock__header-button-span">
+                        <ion-icon name="eye-off-outline"></ion-icon>
+                      </span>
+                      Hide solution
+                    </button>
+                  ) : (
+                    <button
+                      className="CodeBlock__header-button"
+                      onClick={() => setShowSolution(true)}
+                    >
+                      <span className="CodeBlock__header-button-span">
+                        <ion-icon name="eye-outline"></ion-icon>
+                      </span>
+                      Show solution
+                    </button>
+                  )}
+                </>
+              )}
+
+              {copy ? (
+                <button className="CodeBlock__header-button">
+                  <span className="CodeBlock__header-button-span">
+                    <ion-icon name="checkmark-sharp"></ion-icon>
+                  </span>
+                  Copied!
+                </button>
+              ) : (
+                <button
+                  className="CodeBlock__header-button"
+                  onClick={() => {
+                    navigator.clipboard.writeText("");
+                    setCopy(true);
+                    setTimeout(() => {
+                      setCopy(false);
+                    }, 3000);
+                  }}
+                >
+                  <span className="CodeBlock__header-button-span">
+                    <ion-icon name="clipboard-outline"></ion-icon>
+                  </span>
+                  Copy code
+                </button>
+              )}
+            </div>
           </div>
 
           <div className="CodeBlock__code-container">
@@ -235,6 +280,7 @@ function CodeBlock() {
               padding={15}
               style={{
                 maxHeight: "60vh",
+                width: "100vw",
                 fontSize: 16,
                 backgroundColor: "#1e1e1e",
                 overflow: "auto",
@@ -242,6 +288,24 @@ function CodeBlock() {
                   "ui-monospace,SFMono-Regular,SF Mono,Consolas,Liberation Mono,Menlo,monospace",
               }}
             />
+
+            {showSolution && (
+              <CodeEditor
+                value={solution}
+                language="javascript"
+                readOnly={true}
+                padding={15}
+                style={{
+                  maxHeight: "60vh",
+                  width: "100vw",
+                  fontSize: 16,
+                  backgroundColor: "black",
+                  overflow: "auto",
+                  fontFamily:
+                    "ui-monospace,SFMono-Regular,SF Mono,Consolas,Liberation Mono,Menlo,monospace",
+                }}
+              />
+            )}
           </div>
 
           <div className="CodeBlock__question-container">

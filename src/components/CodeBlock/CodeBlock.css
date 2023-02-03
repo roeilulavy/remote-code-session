@@ -92,6 +92,13 @@
   padding: 0;
 }
 
+.CodeBlock__header-button-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+}
+
 .CodeBlock__header-button, .CodeBlock__question-button {
   font-family: 'Roboto',sans-serif;
   display: inline-flex;
@@ -118,8 +125,11 @@
 
 .CodeBlock__code-container, .CodeBlock__task-container {
   max-height: 60vh;
+  display: flex;
+  flex-direction: row;
   border-radius: 0 0 10px 10px;
   overflow: hidden;
+  background-color: blue;
   margin: 0;
   padding: 0;
 }
