@@ -113,18 +113,19 @@ function CodeBlock() {
     };
   }, [id]);
 
-  const checkLiveSolution = (e) => {
-    if (disableLiveChecking) {
+  useEffect(() => {
+    if (disableLiveChecking || code === "" || solution === "") {
       return;
     }
 
-    let codeToCheck = e
+    let codeToCheck = code
       .split(" ")
       .join("")
       .split("\n")
       .join("")
       .split("	")
       .join("");
+
     let solutionToCheck = solution
       .split(" ")
       .join("")
@@ -138,7 +139,7 @@ function CodeBlock() {
       setIsPopupOpen(true);
       setDisableLiveChecking(true);
     }
-  };
+  }, [code, disableLiveChecking, solution]);
 
   const checkSolution = () => {
     setCheckButtonState("Checking code");
@@ -274,9 +275,8 @@ function CodeBlock() {
               onChange={(e) => {
                 socket.emit("code-update", { code: e.target.value });
                 setCode(e.target.value);
-                checkLiveSolution(e.target.value);
               }}
-              // readOnly={isMentor ? true : false}
+              readOnly={isMentor ? true : false}
               padding={15}
               style={{
                 maxHeight: "60vh",
