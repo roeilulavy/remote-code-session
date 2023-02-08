@@ -135,6 +135,7 @@
 }
 
 .CodeBlock__task-container {
+  min-height: 200px;
   max-height: 30vh;
   background-color: #1e1e1e;
   margin: 0;
@@ -144,7 +145,6 @@
 .CodeBlock__task-text {
   position: relative;
   width: 100%;
-  min-height: 100px;
   resize: none;
   font-family: 'Roboto',sans-serif;
   font-size: 1.1rem;

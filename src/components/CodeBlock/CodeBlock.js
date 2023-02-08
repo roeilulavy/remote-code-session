@@ -30,8 +30,7 @@ function CodeBlock() {
   useEffect(() => {
     let sid = null;
 
-    // const socket = io("https://real-time-coding.onrender.com");
-    const socket = io("localhost:5000");
+    const socket = io("https://real-time-coding.onrender.com");
     setSocket(socket);
 
     const getCodeBlock = async () => {
